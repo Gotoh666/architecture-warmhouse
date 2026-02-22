@@ -59,7 +59,7 @@
 
 **Диаграмма компонентов (Components)**
 
-![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4component.png)
+![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4components.png)
 
 **Диаграмма кода (Code)**
 
