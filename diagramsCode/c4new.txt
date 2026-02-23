@@ -1,0 +1,71 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Пользователь", "Мобильное или веб приложение")
+
+System_Ext(device, "Устройство", "датчик, реле, камера, ворота и т.п.")
+note right of device
+ Физическое устройство: передаёт телеметрию и принимает команды.
+end note
+
+System_Boundary(system, "Умный дом (SaaS)"){
+
+Container(api_gateway, "API Gateway", "Go")
+Container(auth, "Authentication service", "Keycloak")
+Container(device_management, "Device Management", "Go / Web Api")
+note right of device_management
+Управление устройствами, привязка к пользователю.
+Принимает команды и телеметрию от устройств
+end note
+
+Container(kafka, "Event Bus", "Kafka")
+note right of kafka
+ Поток команд, событий и телеметрии
+end note
+
+Container(telemetry_service, "Telemetry Service", "Go / Web Api")
+note right of telemetry_service
+ Читает события из Kafka и сохраняет историю телеметрии
+end note
+
+Container(automation_service, "Automation Service", "Go / Web Api")
+note right of automation_service
+ Запускает и хранит сценарии на основе событий, созданные пользователем
+end note
+
+Container(notification_service, "Notification Service", "Go / Web Api")
+
+Container(mqtt, "MQTT Broker", "MQTT")
+
+ContainerDb(telemetry_db, "Telemetry DB", "InfluxDB")
+ContainerDb(device_management_db, "Device Management DB", "Postgresql")
+ContainerDb(automation_service_db, "Automation Service DB", "Postgresql")
+
+}
+Rel(user, api_gateway, "Управлет устройствами, управляет своими данными, получает данные", "HTTPS")
+Rel(user, auth, "Авторизуется", "HTTPS")
+
+Rel(device, mqtt, "Телеметрия", "MQTT")
+
+Rel(mqtt, device, "Команды", "MQTT")
+Rel(device_management, kafka, "Публикует события устройства, получает команды")
+
+Rel(api_gateway, device_management, "CRUD по устройствам пользователя, команды устройствам")
+Rel(api_gateway, telemetry_service, "Получает историю телеметрии")
+Rel(api_gateway, automation_service, "CRUD по сценариям")
+
+Rel(telemetry_service, kafka, "Получает телеметрию")
+Rel(automation_service, kafka, "Получает события устройств")
+Rel(notification_service, kafka, "Получает уведомления")
+
+Rel(automation_service, kafka, "Публикует команды")
+Rel(automation_service, kafka, "Публикует уведомления")
+
+Rel(device_management, device_management_db, "CRUD по устройствам")
+Rel(telemetry_service, telemetry_db, "CRUD телеметрии")
+Rel(automation_service, automation_service_db, "CRUD по сценариям")
+
+Rel(mqtt, device_management, "Команды", "MQTT")
+Rel(mqtt, device_management, "Телеметрия", "MQTT")
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+
+entity "Device" as Device {
+  * id : UUID <<PK>>
+  name : varchar
+  type : varchar
+  home_id : UUID
+  room_id : UUID?
+}
+
+entity "TelemetryRaw" as TelemetryRaw {
+  * time : timestamptz <<PK>>   -- время измерения
+  * device_id : UUID <<PK>>     -- составной PK
+  metric : varchar               -- например: temperature, humidity, voltage
+  value : double                 -- числовое значение
+  json_data : jsonb?             -- если значение не числовое
+}
+
+entity "TelemetryDailyAgg" as TelemetryDailyAgg {
+  * day : date <<PK>>
+  * device_id : UUID <<PK>>
+  metric : varchar <<PK>>
+  min_value : double
+  max_value : double
+  avg_value : double
+  sum_value : double?
+}
+
+Device ||--o{ TelemetryRaw
+Device ||--o{ TelemetryDailyAgg
+
+@enduml

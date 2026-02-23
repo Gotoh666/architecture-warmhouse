@@ -1,0 +1,16 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(person, "User", "Пользователь")
+System_Ext(device, "Устройство", "датчик, реле, камера, ворота и т.п.")
+
+System_Boundary(smart_home_system, "Умный дом"){
+    Container(service, "Сервис управления устройствами", "Go / web api")
+}
+
+
+Rel(person, service, "Управление устройствами", "Https")
+Rel(service, device, "Управление устройствами, получение телеметрии", "Https")
+
+
+@enduml

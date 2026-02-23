@@ -1,0 +1,41 @@
+@startuml
+
+entity "scenarios" {
+  * id : uuid <<PK>>
+  --
+  home_id : uuid <<FK>>
+  name : string
+  description : string
+  is_active : bool
+  created_at : timestamp
+}
+
+entity "scenario_triggers" {
+  * id : uuid <<PK>>
+  --
+  scenario_id : uuid <<FK>>
+  trigger_type : string
+  condition_json : json
+}
+
+entity "scenario_actions" {
+  * id : uuid <<PK>>
+  --
+  scenario_id : uuid <<FK>>
+  action_type : string
+  payload_json : json
+}
+
+entity "scenario_logs" {
+  * id : uuid <<PK>>
+  --
+  scenario_id : uuid <<FK>>
+  executed_at : timestamp
+  result : string
+  details_json : json
+}
+
+scenarios ||--o{ scenario_triggers
+scenarios ||--o{ scenario_actions
+scenarios ||--o{ scenario_logs
+@enduml

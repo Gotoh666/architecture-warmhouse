@@ -1,0 +1,58 @@
+@startuml
+
+entity "Home" as Home {
+  * id : UUID <<PK>>
+  * owner_id : UUID <<FK>>  -- Keycloak user_id
+  --
+  name : varchar
+  address : varchar?
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "HomeUser" as HomeUser {
+  * id : UUID <<PK>>
+  * home_id : UUID <<FK>>
+  * user_id : UUID <<FK>>  -- позволяет расшаривать дом
+  --
+  role : enum(owner, member)
+}
+
+entity "Room" as Room {
+  * id : UUID <<PK>>
+  * home_id : UUID <<FK>>
+  --
+  name : varchar
+}
+
+entity "Device" as Device {
+  * id : UUID <<PK>>
+  * room_id : UUID <<FK>>?
+  * home_id : UUID <<FK>>
+  --
+  name : varchar
+  type : varchar
+  manufacturer : varchar?
+  model : varchar?
+  status : varchar
+  serial_number : varchar
+  created_at : timestamp
+}
+
+entity "CommandsLog" {
+  * id : uuid <<PK>>
+  --
+  device_id : uuid <<FK>>
+  command : string
+  payload_json : json
+  status : string
+  created_at : timestamp
+}
+
+Home ||--o{ Room
+Home ||--o{ Device
+Home ||--o{ HomeUser
+Room ||--o{ Device
+Device ||--o{ CommandsLog
+
+@enduml
