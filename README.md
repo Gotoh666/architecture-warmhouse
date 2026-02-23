@@ -48,24 +48,22 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-[Диаграмма контекста](https://www.plantuml.com/plantuml/png/NOunQyD038Lt_mhLKmgElNJgb10A7He8IKF7Sh4L--1EPoGv9l--iccXplIEntsVtaRKiGunP4-UwZ0q29rgBwzLnMuiMw_TS1a4kKwaI5hMALPzS3GnQz4c-4krUraVfkgy_wYY4qMswdjdXFE4NFQJFpiWIw9LFySsU2S5v6TJvxy9wGgZuzWbEmXoDr7CdxFJ_5Z977_Sr-C_wxOXf570IXRG13UF8oW6ZAXy1qSDH4UkHMZmvciKasT73Cj9oplx1M1kJsq1BQhyCryvpGFULVi2Zc-dJpDla9eXXXy0)
+![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4asis.png)
 
 
 # Задание 2. Проектирование микросервисной архитектуры
 
-В этом задании вам нужно предоставить только диаграммы в модели C4. Мы не просим вас отдельно описывать получившиеся микросервисы и то, как вы определили взаимодействия между компонентами To-Be системы. Если вы правильно подготовите диаграммы C4, они и так это покажут.
-
 **Диаграмма контейнеров (Containers)**
+![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4new.png)
 
-Добавьте диаграмму.
 
 **Диаграмма компонентов (Components)**
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4components.png)
 
 **Диаграмма кода (Code)**
 
-Добавьте одну диаграмму или несколько.
+![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/uml.png)
 
 # Задание 3. Разработка ER-диаграммы
 
