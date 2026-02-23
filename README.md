@@ -48,36 +48,45 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4asis.png)
+![Визуализация контекста системы](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4asis.png)
 
 
 # Задание 2. Проектирование микросервисной архитектуры
 
 **Диаграмма контейнеров (Containers)**
-![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4new.png)
+![Диаграмма контейнеров](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4new.png)
 
 
 **Диаграмма компонентов (Components)**
 
-![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4components.png)
+![Диаграмма компонентов](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/c4components.png)
 
 **Диаграмма кода (Code)**
 
-![(https://github.com/jon/coolproject/raw/master/image/image.png)](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/uml.png)
+![Диаграмма кода](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/uml.png)
 
 # Задание 3. Разработка ER-диаграммы
 
-Добавьте сюда ER-диаграмму. Она должна отражать ключевые сущности системы, их атрибуты и тип связей между ними.
+### Device management 
+![Device management ](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/erDevices.png)
+
+### Automation management 
+![Automation management ](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/erAutomation.png)
+
+### Telemetry management 
+![Telemetry management ](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/images/erTelemetry.png)
 
 # Задание 4. Создание и документирование API
 
 ### 1. Тип API
 
-Укажите, какой тип API вы будете использовать для взаимодействия микросервисов. Объясните своё решение.
+RESP API + Async API 
 
 ### 2. Документация API
 
-Здесь приложите ссылки на документацию API для микросервисов, которые вы спроектировали в первой части проектной работы. Для документирования используйте Swagger/OpenAPI или AsyncAPI.
+![DeviceService](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/ApiDescriptions/DeviceServiceRest.yaml)
+
+![AutomationAsyncApi](https://github.com/Gotoh666/architecture-warmhouse/blob/warmhouse/ApiDescriptions/AutomationAsyncApi.yaml)
 
 # Задание 5. Работа с docker и docker-compose
 
