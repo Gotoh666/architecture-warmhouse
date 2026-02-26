@@ -1,0 +1,428 @@
+openapi: 3.1.0
+info:
+  title: Devices Service API
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com
+
+tags:
+  - name: Homes
+  - name: Rooms
+  - name: Devices
+  - name: Commands
+
+paths:
+
+  ############################
+  #         HOMES
+  ############################
+  /homes:
+    get:
+      summary: Get homes of current user
+      tags: [Homes]
+      responses:
+        "200":
+          description: List of homes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Home"
+
+    post:
+      summary: Create a home
+      tags: [Homes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HomeCreateRequest"
+      responses:
+        "201":
+          description: Created home
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Home"
+
+  /homes/{homeId}:
+    get:
+      summary: Get a home
+      tags: [Homes]
+      parameters:
+        - $ref: "#/components/parameters/HomeId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Home"
+        "404":
+          description: Home not found
+
+    put:
+      summary: Update a home
+      tags: [Homes]
+      parameters:
+        - $ref: "#/components/parameters/HomeId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HomeUpdateRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Home"
+
+    delete:
+      summary: Delete a home
+      tags: [Homes]
+      parameters:
+        - $ref: "#/components/parameters/HomeId"
+      responses:
+        "204":
+          description: Deleted
+
+
+  ############################
+  #        ROOMS
+  ############################
+
+  /homes/{homeId}/rooms:
+    get:
+      summary: Get rooms for home
+      tags: [Rooms]
+      parameters:
+        - $ref: "#/components/parameters/HomeId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Room"
+
+    post:
+      summary: Create room in home
+      tags: [Rooms]
+      parameters:
+        - $ref: "#/components/parameters/HomeId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomCreateRequest"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+
+  /rooms/{roomId}:
+    get:
+      summary: Get room
+      tags: [Rooms]
+      parameters:
+        - $ref: "#/components/parameters/RoomId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+        "404":
+          description: Not found
+
+    put:
+      summary: Update room
+      tags: [Rooms]
+      parameters:
+        - $ref: "#/components/parameters/RoomId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomUpdateRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+
+    delete:
+      summary: Delete room
+      tags: [Rooms]
+      parameters:
+        - $ref: "#/components/parameters/RoomId"
+      responses:
+        "204":
+          description: Deleted
+
+
+  ############################
+  #        DEVICES
+  ############################
+
+  /homes/{homeId}/devices:
+    get:
+      summary: List devices in home
+      tags: [Devices]
+      parameters:
+        - $ref: "#/components/parameters/HomeId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Device"
+
+    post:
+      summary: Register new device
+      tags: [Devices]
+      parameters:
+        - $ref: "#/components/parameters/HomeId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceCreateRequest"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+
+  /devices/{deviceId}:
+    get:
+      summary: Get device
+      tags: [Devices]
+      parameters:
+        - $ref: "#/components/parameters/DeviceId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "404":
+          description: Not found
+
+    put:
+      summary: Update device
+      tags: [Devices]
+      parameters:
+        - $ref: "#/components/parameters/DeviceId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceUpdateRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+
+    delete:
+      summary: Delete device
+      tags: [Devices]
+      parameters:
+        - $ref: "#/components/parameters/DeviceId"
+      responses:
+        "204":
+          description: Deleted
+
+
+  ############################
+  #        DEVICE COMMANDS
+  ############################
+
+  /devices/{deviceId}/commands:
+    post:
+      summary: Execute command on device
+      description: Команды от пользователя. Команды от сервиса автоматизации принимаются через Кафку
+      tags: [Commands]
+      parameters:
+        - $ref: "#/components/parameters/DeviceId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommandRequest"
+      responses:
+        "202":
+          description: Command accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResponse"
+        "404":
+          description: Device not found
+
+  /devices/{deviceId}/commands/logs:
+    get:
+      summary: Get command logs for device
+      tags: [Commands]
+      parameters:
+        - $ref: "#/components/parameters/DeviceId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CommandsLog"
+
+
+components:
+
+  ############################
+  #     PARAMETERS
+  ############################
+
+  parameters:
+    HomeId:
+      name: homeId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+    RoomId:
+      name: roomId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+    DeviceId:
+      name: deviceId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+
+  ############################
+  #        SCHEMAS
+  ############################
+
+  schemas:
+
+    Home:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        ownerId: { type: string, format: uuid }
+        name: { type: string }
+        address: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    HomeCreateRequest:
+      type: object
+      properties:
+        name: { type: string }
+        address: { type: string, nullable: true }
+
+    HomeUpdateRequest:
+      type: object
+      properties:
+        name: { type: string }
+        address: { type: string }
+
+    Room:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        homeId: { type: string, format: uuid }
+        name: { type: string }
+
+    RoomCreateRequest:
+      type: object
+      properties:
+        name: { type: string }
+
+    RoomUpdateRequest:
+      type: object
+      properties:
+        name: { type: string }
+
+    Device:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        homeId: { type: string, format: uuid }
+        roomId: { type: string, format: uuid, nullable: true }
+        name: { type: string }
+        type: { type: string }
+        manufacturer: { type: string, nullable: true }
+        model: { type: string, nullable: true }
+        status: { type: string }
+        serialNumber: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    DeviceCreateRequest:
+      type: object
+      properties:
+        roomId: { type: string, format: uuid, nullable: true }
+        name: { type: string }
+        type: { type: string }
+        manufacturer: { type: string, nullable: true }
+        model: { type: string, nullable: true }
+        serialNumber: { type: string }
+
+    DeviceUpdateRequest:
+      type: object
+      properties:
+        roomId: { type: string, format: uuid, nullable: true }
+        name: { type: string }
+        type: { type: string }
+        manufacturer: { type: string }
+        model: { type: string }
+        status: { type: string }
+
+    CommandRequest:
+      type: object
+      properties:
+        command: { type: string }
+        payload:
+          type: object
+          nullable: true
+
+    CommandResponse:
+      type: object
+      properties:
+        commandId: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [queued]
+        createdAt: { type: string, format: date-time }
+
+    CommandsLog:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        deviceId: { type: string, format: uuid }
+        command: { type: string }
+        payloadJson: { type: object }
+        status: { type: string }
+        createdAt: { type: string, format: date-time }

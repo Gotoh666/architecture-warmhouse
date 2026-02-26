@@ -1,0 +1,38 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+System_Ext(device, "Device", "Датчик, реле, камера, ворота и т.п.")
+Container(mqtt, "MQTT broker", "MQTT", "Поток данных от устройств")
+Container(broker, "Message broker", "Kafka", "Поток команд, событий и телеметрии")
+ContainerDb(device_db, "Device DB", "Postgresql")
+
+Container_Boundary(device_gateway, "Device Management") {
+    Component(mqtt_client, "MQTT Client", "MQTT Client", "Подписка на телеметрию, публикация команд")
+    Component(device_adapter, "Device Adapter", "Class", "Преобразование данных устройств и команд")
+    Component(kafka_commands_handler, "Commands handler", "Kafka Client", "Получает команды для устройств")
+    Component(kafka_events_publisher, "Events handler", "Kafka Client", "Публикует телеметрию и статус устройств")
+    
+    Component(device_controller, "Device Controller", "Mvc Controller", "АПИ контроллер устройств")
+    Component(сommands_controller, "Commands Controller", "Mvc Controller", "АПИ контроллер команд")
+    Component(device_service, "Device Service", "Service", "Логика работы с устройствами. CRUD, команды")
+    
+    Rel(mqtt_client, mqtt, "Получает события из, отправляет команды в")
+
+    Rel(device_service, mqtt_client, "Получает события из, отправляет команды в")
+    
+    Rel(kafka_commands_handler, device_service, "Отправляет команды в")
+    Rel(device_service, kafka_events_publisher, "Отправляет события от устройств в")
+    
+    Rel(kafka_commands_handler, broker, "Читает команды из")
+    Rel(kafka_events_publisher, broker, "Публикует события в")
+    
+    Rel(device_controller, device_service, "CRUD по устройствам")
+    Rel(сommands_controller, device_service, "Команды устройствам")
+
+    Rel(device_service, device_adapter, "Испольузет")
+}
+
+
+Rel(device_service, device_db, "CRUD по устройствам")
+Rel(device, mqtt, "Получает команды из, отправляет события в")
+@enduml

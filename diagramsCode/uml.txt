@@ -1,0 +1,110 @@
+@startuml
+' UML классы для Device Management: Device Service + Device Adapter
+
+' --- Базовые классы устройств ---
+abstract class Device {
+    +id: String
+    +name: String
+    +type: DeviceType
+    +state: DeviceState
+    +updateState(newState: DeviceState)
+    +sendCommand(cmd: Command)
+}
+
+class Sensor extends Device {
+    +readValue(): float
+}
+
+class Relay extends Device {
+    +turnOn()
+    +turnOff()
+}
+
+class Gate extends Device {
+    +open()
+    +close()
+}
+
+class Camera extends Device {
+    +startRecording()
+    +stopRecording()
+}
+
+enum DeviceType {
+    SENSOR
+    RELAY
+    GATE
+    CAMERA
+}
+
+class DeviceState {
+    +status: String
+    +lastUpdate: DateTime
+    +value: float
+}
+
+class Command {
+    +type: String
+    +payload: Map<String, String>
+}
+
+class TelemetryEvent {
+    +deviceId: String
+    +timestamp: DateTime
+    +data: Map<String, String>
+}
+
+' --- Device Adapter ---
+class DeviceAdapter {
+    +sendCommandToDevice(cmd: Command)
+    +processTelemetry(event: TelemetryEvent)
+}
+
+' --- Device Service ---
+class DeviceService {
+    -repository: DeviceRepository
+    -commandHandler: DeviceCommandHandler
+    -eventPublisher: EventPublisher
+    -adapter: DeviceAdapter
+    +executeCommand(cmd: Command)
+    +processTelemetry(event: TelemetryEvent)
+    +getDevice(id: String): Device
+    +createDevice(device: Device)
+    +updateDevice(device: Device)
+    +deleteDevice(id: String)
+}
+
+class DeviceRepository {
+    +getDevice(id: String): Device
+    +saveDevice(device: Device)
+    +deleteDevice(id: String)
+}
+
+class DeviceCommandHandler {
+    +handleCommand(cmd: Command)
+}
+
+class EventPublisher {
+    +publishEvent(event: TelemetryEvent)
+}
+
+' --- Связи ---
+DeviceService "1" o-- "1" DeviceRepository
+DeviceService "1" o-- "1" DeviceCommandHandler
+DeviceService "1" o-- "1" EventPublisher
+DeviceService "1" o-- "1" DeviceAdapter
+
+DeviceAdapter "1" ..> Device : управляет
+DeviceAdapter "1" ..> TelemetryEvent : получает
+DeviceAdapter "1" ..> Command : отправляет
+
+DeviceService "1" ..> Device
+DeviceCommandHandler "1" ..> DeviceAdapter : исполняет команды
+EventPublisher "1" ..> TelemetryEvent : публикует события
+
+Device <|-- Sensor
+Device <|-- Relay
+Device <|-- Gate
+Device <|-- Camera
+
+@enduml
